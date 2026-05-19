@@ -4,6 +4,7 @@ Case study #01 · Author: Kaveri J. B. · Category: Web Application Security · 
 
 
 **TL;DR**
+
 A common but high-impact authorization flaw where the application trusts a client-supplied identifier (e.g. userId, accountId, invoiceId) without verifying that the authenticated user actually owns the referenced resource. The result: any logged-in user can access — and sometimes modify — data belonging to other users by simply changing a number in the URL or request body.
 This case study walks through how the issue manifests, how to identify it during a VAPT engagement, how to reproduce a sanitised version in a lab environment, and how to remediate it at both the code and architecture level.
 
