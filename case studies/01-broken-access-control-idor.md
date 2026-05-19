@@ -40,13 +40,13 @@ Step-by-step approach used during the engagement:
 To demonstrate this pattern publicly without breaching client confidentiality, the same flaw is reproducible against the OWASP Juice Shop vulnerable application.
 Lab setup
 bashdocker run --rm -p 3000:3000 bkimminich/juice-shop
-Navigate to http://localhost:3000 and create two test accounts (testuser-a@lab.local and testuser-b@lab.local).
+Navigate to http://localhost:3000 and create two test accounts (usera@lab.local and userb@lab.local).
 Reproduction steps
 
 Log in as User A and add an item to the basket.
-Inspect the basket request in Burp Suite — note the basket ID in the URL (e.g. /rest/basket/1).
-Log in as User B in a separate browser/incognito session — note their basket ID (e.g. /rest/basket/2).
-As User A, in Burp Repeater, change the URL to User B's basket ID: /rest/basket/2 while keeping User A's authorization header.
+Inspect the basket request in Burp Suite — note the basket ID in the URL (e.g. /rest/basket6).
+Log in as User B in a separate browser/incognito session — note their basket ID (e.g. /rest/basket/7).
+As User A, in Burp Repeater, change the URL to User B's basket ID: /rest/basket/7 while keeping User A's authorization header.
 Observe: the response returns User B's basket contents.
 
 
