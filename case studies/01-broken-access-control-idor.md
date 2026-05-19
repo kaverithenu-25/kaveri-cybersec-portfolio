@@ -9,7 +9,6 @@ A common but high-impact authorization flaw where the application trusts a clien
 This case study walks through how the issue manifests, how to identify it during a VAPT engagement, how to reproduce a sanitised version in a lab environment, and how to remediate it at both the code and architecture level.
 
 **1. Background**
-[FILL IN: 2–3 sentences anonymising the engagement. Example wording you can adapt:]
 During a VAPT engagement on a fintech-style web application handling customer financial records, an Insecure Direct Object Reference (IDOR) vulnerability was identified in a transaction history module. The application correctly enforced authentication (every endpoint required a valid session token), but failed to enforce authorization — meaning it did not verify whether the requesting user had permission to view the specific resource being requested.
 This is one of the most common findings in real-world web application assessments and consistently ranks in the OWASP Top 10. It tends to slip past automated scanners because the technical request looks valid — the only thing wrong is who is making it.
 
