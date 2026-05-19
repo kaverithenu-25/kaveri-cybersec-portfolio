@@ -1,6 +1,6 @@
 ### Broken Access Control (IDOR) — A Real-World Pattern in a Fintech-Style Flow
 
-Case study #01 · Author: Kaveri J. B. · Category: Web Application Security · OWASP: A01:2021 Broken Access Control
+**Case study #01** · **Author**: **Kaveri J. B**. · **Category**: **Web Application Security** · **OWASP**: **A01:2021 Broken Access Control**
 
 
 **TL;DR**
