@@ -110,6 +110,6 @@ DAST: authenticated DAST tools with multi-user configuration (e.g. Burp Suite En
 **8. References**
 
 OWASP Top 10 — A01:2021 Broken Access Control  
-OWASP — Insecure Direct Object Reference Prevention Cheat Sheet
+OWASP — Insecure Direct Object Reference Prevention Cheat Sheet                     
 OWASP API Security Top 10 — API1:2023 Broken Object Level Authorization
-PortSwigger Web Security Academy — Access control vulnerabilities and privilege escalation
+             PortSwigger Web Security Academy — Access control vulnerabilities and privilege escalation
