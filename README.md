@@ -96,7 +96,7 @@ Active interest and skill-building in **LLM Security Testing** — listed on pro
 
 **Web & API**
 - [ ] CERT-IN audit clearance: methodology, evidence packaging, and remediation tracking *(anonymised)*
-- [ ] OWASP A01 Broken Access Control — a real-world IDOR pattern in a fintech-style flow
+- [x] [OWASP A01 Broken Access Control — IDOR pattern in a fintech-style flow (./case-studies/01-broken-access-control-idor.md)
 - [ ] OWASP API1 BOLA in a multi-tenant API — detection and remediation
 
 **SAST / Secure Code Review**
