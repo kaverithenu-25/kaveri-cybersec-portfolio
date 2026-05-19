@@ -29,11 +29,11 @@ Sequential or guessable IDs. When resources use integers (1, 2, 3...) instead of
 **3. Detection methodology**
 Step-by-step approach used during the engagement:
 
-Map the application. Walk through every authenticated function as a normal user (User A). Note every endpoint that takes an ID parameter — query string, URL path, request body, or hidden form field.
-Capture authenticated requests in Burp Suite. Each request that references a user-owned object becomes a candidate for IDOR testing.
-Create a second test account (User B). Note User B's resource IDs as a control set.
-Replay User A's requests but substitute User B's IDs, using User A's session token. If the server returns User B's data — you have an IDOR.
-Escalate horizontally and vertically. Test if User A can not only read but also modify, delete, or perform actions on User B's resources. Test if a regular user can access admin-tier IDs.
+-Map the application. Walk through every authenticated function as a normal user (User A). Note every endpoint that takes an ID parameter — query string, URL path, request body, or hidden form field.
+-Capture authenticated requests in Burp Suite. Each request that references a user-owned object becomes a candidate for IDOR testing.
+-Create a second test account (User B). Note User B's resource IDs as a control set.
+-Replay User A's requests but substitute User B's IDs, using User A's session token. If the server returns User B's data — you have an IDOR.
+-Escalate horizontally and vertically. Test if User A can not only read but also modify, delete, or perform actions on User B's resources. Test if a regular user can access admin-tier IDs.
 
 
 **4. Reproduction in a safe lab environment**
@@ -51,14 +51,21 @@ Observe: the response returns User B's basket contents.
 
 
 
-5. Impact assessment
-DimensionRatingReasoningConfidentialityHighDirect exposure of another user's financial / personal dataIntegrityMedium–HighIf the endpoint also accepts POST/PUT, attacker can modify others' recordsAvailabilityLowUnlikely direct impact, though deletion variants existCVSS 3.17.7 (High)AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:NBusiness impactCriticalRegulatory exposure (data protection law), reputation damage, contractual breach
+**5. Impact assessment**
+**Dimension        Rating                      Reasoning **  
+Confidentiality    High          Direct exposure of another user's financial / personal data
+Integrity          Medium–High   If the endpoint also accepts POST/PUT, attacker can modify others' records
+Availability       Low           Unlikely direct impact, though deletion variants exist
+CVSS 3.1           7.7 (High)    AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N
+Business impact    Critical      Regulatory exposure (data protection law), reputation damage, contractual breach
+
 In a fintech context, this single finding can be sufficient to fail a security audit or block a regulated product launch.
 
 **6. Remediation**
 Immediate fix (code level)
 Every protected endpoint must verify resource ownership server-side. A typical Node.js / Express example:
-javascript// VULNERABLE
+javascript
+// VULNERABLE
 app.get('/api/v1/transactions', authenticate, (req, res) => {
   const userId = req.query.userId;          // ← trusts client
   return db.getTransactions(userId);
@@ -70,13 +77,16 @@ app.get('/api/v1/transactions', authenticate, (req, res) => {
   return db.getTransactions(userId);
 });
 If the endpoint legitimately needs to accept an ID (e.g. admin viewing any user), enforce an explicit authorization check:
-javascriptapp.get('/api/v1/transactions/:id', authenticate, (req, res) => {
+
+javascript
+app.get('/api/v1/transactions/:id', authenticate, (req, res) => {
   const resource = db.getTransaction(req.params.id);
   if (resource.ownerId !== req.user.id && !req.user.isAdmin) {
     return res.status(403).send('Forbidden');
   }
   return res.send(resource);
 });
+
 Architectural improvements
 
 Replace sequential integer IDs with UUIDs to prevent enumeration.
@@ -91,10 +101,10 @@ DAST: authenticated DAST tools with multi-user configuration (e.g. Burp Suite En
 
 **7. Lessons learned**
 
-Authentication ≠ authorization. A logged-in user is not automatically an authorized user. Every protected resource needs an ownership check.
-The frontend is not a security boundary. "The UI only shows their own ID" is not a control — attackers don't use the UI.
-IDOR is a class of bugs, not a single bug. Fixing one endpoint while leaving others vulnerable provides false confidence. A systematic codebase sweep is required.
-Test it continuously. A one-time pentest finding is closed in a sprint, but the same flaw often resurfaces in a future release. Authorization tests belong in the CI pipeline.
+-Authentication ≠ authorization. A logged-in user is not automatically an authorized user. Every protected resource needs an ownership check.
+-The frontend is not a security boundary. "The UI only shows their own ID" is not a control — attackers don't use the UI.
+-IDOR is a class of bugs, not a single bug. Fixing one endpoint while leaving others vulnerable provides false confidence. A systematic codebase sweep is required.
+-Test it continuously. A one-time pentest finding is closed in a sprint, but the same flaw often resurfaces in a future release. Authorization tests belong in the CI pipeline.
 
 
 **8. References**
